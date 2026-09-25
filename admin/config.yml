@@ -1,0 +1,88 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: kellynam70/Homepages
+  branch: main
+
+media_folder: images/uploads
+public_folder: /images/uploads
+
+collections:
+  - name: research
+    label: RESEARCH
+    label_singular: 연구 글
+    folder: content/research
+    create: true
+    extension: md
+    format: frontmatter
+    identifier_field: title
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{category}} · {{date}} · {{title}}"
+    fields:
+      - label: 제목
+        name: title
+        widget: string
+      - label: 카테고리
+        name: category
+        widget: select
+        options:
+          - AI와 일자리
+          - 중장년의 새로운 기회
+          - 경기북부·지역정책
+          - 정책 아이디어
+      - label: 작성일
+        name: date
+        widget: datetime
+        type: date
+        date_format: YYYY-MM-DD
+        time_format: false
+      - label: 대표 이미지
+        name: featured_image
+        widget: image
+        required: false
+      - label: 짧은 요약
+        name: summary
+        widget: text
+      - label: 본문
+        name: body
+        widget: markdown
+
+  - name: lectures
+    label: LECTURE
+    label_singular: 강의 실적
+    folder: content/lectures
+    create: true
+    extension: md
+    format: frontmatter
+    identifier_field: title
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{date}} · {{title}}"
+    fields:
+      - label: 강의 제목
+        name: title
+        widget: string
+      - label: 강의 기관
+        name: organization
+        widget: string
+      - label: 날짜
+        name: date
+        widget: datetime
+        type: date
+        date_format: YYYY-MM-DD
+        time_format: false
+      - label: 대표 사진
+        name: featured_image
+        widget: image
+        required: false
+      - label: 추가 사진
+        name: gallery
+        widget: list
+        required: false
+        field:
+          label: 사진
+          name: image
+          widget: image
+      - label: 짧은 설명
+        name: description
+        widget: text
