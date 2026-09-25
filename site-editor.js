@@ -116,6 +116,7 @@ const deleteEntry = async (type, id) => {
 
 const addTools = () => {
   if (!state.session) return;
+  document.body.classList.add('is-authenticated');
   document.querySelectorAll('.member-only').forEach((element) => { element.style.display = 'flex'; });
   if (window.researchEntries) addCardActions('research', window.researchEntries);
   if (window.lectureEntries) addCardActions('lecture', window.lectureEntries);
@@ -134,5 +135,8 @@ supabase.auth.getSession().then(({ data: { session } }) => { state.session = ses
 supabase.auth.onAuthStateChange((_event, session) => {
   state.session = session;
   if (session) addTools();
-  else document.querySelectorAll('.member-only').forEach((element) => { element.style.display = 'none'; });
+  else {
+    document.body.classList.remove('is-authenticated');
+    document.querySelectorAll('.member-only').forEach((element) => { element.style.display = 'none'; });
+  }
 });
