@@ -11,6 +11,7 @@
 .article-body p { max-width: 700px; margin: 0 0 22px; color: var(--muted); font-size: 16px; line-height: 2; }
 .article-body img { display: block; max-width: 100%; height: auto; margin: 28px 0; }
 .article-detail .text-link { margin-top: 48px; }
+.content-empty-state { grid-column: 1 / -1; margin: 0; padding: 28px 0; color: var(--muted); font-size: 14px; }
 @media (max-width: 800px) {
 	.article-detail h1 { font-size: 34px; }
 	.article-lead { font-size: 16px; }

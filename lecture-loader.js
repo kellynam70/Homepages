@@ -17,19 +17,23 @@ const formatDate = (value) => {
 const renderLectures = async () => {
   const grid = document.querySelector('#lecture .lecture-grid');
   if (!grid) return;
+  grid.innerHTML = '<p class="content-empty-state">등록된 강의 실적이 없습니다.</p>';
   const { data, error } = await supabase
     .from('lecture')
     .select('id, title, organization, lecture_date, description, image_url')
     .order('lecture_date', { ascending: false });
   if (error || !data?.length) return;
 
-  grid.innerHTML = data.map((lecture, index) => `<article class="lecture-card">
+  grid.innerHTML = data.map((lecture, index) => `<article class="lecture-card" data-id="${escapeHtml(lecture.id)}">
     <div class="lecture-card-media">${lecture.image_url ? `<img src="${escapeHtml(lecture.image_url)}" alt="${escapeHtml(lecture.title || '강의')} 사진">` : '<span>LECTURE</span>'}</div>
     <span class="card-number">${String(index + 1).padStart(2, '0')}</span>
     <h3>${escapeHtml(lecture.title || '')}</h3>
     <p>${escapeHtml(lecture.organization || '')} · ${escapeHtml(formatDate(lecture.lecture_date))}</p>
     <small>${escapeHtml(lecture.description || '')}</small>
   </article>`).join('');
+  window.lectureEntries = data;
+  window.dispatchEvent(new CustomEvent('lecture:rendered', { detail: data }));
 };
 
+window.reloadLectures = renderLectures;
 renderLectures();

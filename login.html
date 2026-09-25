@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>로그인 | 민생연구소 쓸모</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="site-editor.css">
+</head>
+<body class="login-page">
+  <main class="login-shell">
+    <a class="login-brand" href="index.html"><span class="brand-mark">S</span><span>민생연구소 쓸모</span></a>
+    <section class="login-panel" aria-labelledby="login-title">
+      <p class="section-number">PRIVATE ACCESS</p>
+      <h1 id="login-title">관리자 로그인</h1>
+      <p class="login-intro">RESEARCH와 LECTURE 콘텐츠를 관리합니다.</p>
+      <form id="site-login-form" class="site-editor-form">
+        <label for="site-login-email">E-mail</label>
+        <input id="site-login-email" type="email" autocomplete="username" required>
+        <label for="site-login-password">비밀번호</label>
+        <input id="site-login-password" type="password" autocomplete="current-password" required>
+        <button class="editor-primary" type="submit">로그인</button>
+      </form>
+      <p class="site-editor-status" aria-live="polite"></p>
+    </section>
+  </main>
+  <script type="module" src="login.js"></script>
+</body>
+</html>
