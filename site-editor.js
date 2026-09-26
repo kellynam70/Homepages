@@ -11,7 +11,13 @@ const escapeHtml = (value = '') => String(value)
   .replaceAll("'", '&#039;');
 
 const setStatus = (message, error = false) => {
-  const status = $('.site-editor-status');
+  let status = $('.site-editor-status');
+  if (!status) {
+    status = document.createElement('p');
+    status.className = 'site-editor-status site-editor-notice';
+    status.setAttribute('role', 'status');
+    document.body.append(status);
+  }
   if (status) { status.textContent = message; status.dataset.error = String(error); }
 };
 
@@ -38,8 +44,26 @@ const addCardActions = (type, entries) => {
     const actions = document.createElement('div');
     actions.className = 'content-actions';
     actions.innerHTML = '<button type="button" class="edit-content">수정</button><button type="button" class="delete-content">삭제</button>';
-    actions.querySelector('.edit-content').addEventListener('click', () => openEditor(type, entries.find((entry) => String(entry.id) === card.dataset.id)));
-    actions.querySelector('.delete-content').addEventListener('click', () => deleteEntry(type, card.dataset.id));
+    actions.querySelector('.edit-content').addEventListener('click', async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const button = event.currentTarget;
+      button.disabled = true;
+      try {
+        const { data, error } = await supabase.from(type).select('*').eq('id', card.dataset.id).single();
+        if (error || !data) throw error || new Error('내용을 불러오지 못했습니다.');
+        if (state.session) openEditor(type, data);
+      } catch {
+        setStatus('수정할 내용을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.', true);
+      } finally {
+        button.disabled = false;
+      }
+    });
+    actions.querySelector('.delete-content').addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      deleteEntry(type, card.dataset.id);
+    });
     card.append(actions);
   });
 };
@@ -137,6 +161,7 @@ supabase.auth.onAuthStateChange((_event, session) => {
   if (session) addTools();
   else {
     document.body.classList.remove('is-authenticated');
+    document.querySelectorAll('.content-actions, .site-editor-overlay').forEach((element) => element.remove());
     document.querySelectorAll('.member-only').forEach((element) => { element.style.display = 'none'; });
   }
 });
